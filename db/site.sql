@@ -27,8 +27,10 @@ CREATE TABLE roles(
 CREATE TABLE articles(
    id INTEGER PRIMARY KEY,
    revision_id INTEGER,
+   topic_id INTEGER,
    status TEXT,
-   FOREIGN KEY(revision_id) REFERENCES revisions(id)
+   FOREIGN KEY(revision_id) REFERENCES revisions(id),
+   FOREIGN KEY(topic_id) REFERENCES topics(id)
 );
 CREATE TABLE revisions(
    article_id INTEGER,
@@ -40,6 +42,12 @@ CREATE TABLE revisions(
    content TEXT,
    FOREIGN KEY(article_id) REFERENCES articles(id),
    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+CREATE TABLE topics(
+   id INTEGER PRIMARY KEY,
+   name TEXT,
+   description TEXT,
+   image_url
 );
 CREATE TABLE comments(
    id INTEGER PRIMARY KEY,
