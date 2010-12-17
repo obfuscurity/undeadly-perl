@@ -8,6 +8,7 @@ CREATE TABLE users(
    email TEXT,
    url TEXT,
    tz TEXT,
+   reputation INTEGER,
    FOREIGN KEY(role_id) REFERENCES roles(id)
 );
 CREATE TABLE roles(
