@@ -48,7 +48,7 @@ CREATE TABLE topics(
    id INTEGER PRIMARY KEY,
    name TEXT,
    description TEXT,
-   image_url
+   image_url TEXT
 );
 CREATE TABLE comments(
    id INTEGER PRIMARY KEY,
