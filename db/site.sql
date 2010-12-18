@@ -41,6 +41,7 @@ CREATE TABLE revisions(
    dept TEXT,
    format TEXT,
    content TEXT,
+   comment TEXT,
    FOREIGN KEY(article_id) REFERENCES articles(id),
    FOREIGN KEY(user_id) REFERENCES users(id)
 );
