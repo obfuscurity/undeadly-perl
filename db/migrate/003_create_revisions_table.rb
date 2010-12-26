@@ -1,24 +1,19 @@
 class CreateRevisionsTable < ActiveRecord::Migration
   def self.up
-    create_table :revisions do |t|
-      t.references :article
-      t.references :user
-      t.integer :epoch
-      t.string :title
-      t.text :dept
-      t.text :content
-      t.text :description
-      t.string :format
-    end
     execute <<-SQL
-      ALTER TABLE revisions
-        ADD CONSTRAINT fk_revisions_articles
-        FOREIGN KEY (article_id)
-        REFERENCES articles(id)
-      ALTER TABLE revisions
-        ADD CONSTRAINT fk_revisions_users
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
+      CREATE TABLE revisions(
+         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+         article_id INTEGER,
+         user_id INTEGER,
+         epoch INTEGER,
+         title TEXT,
+         dept TEXT,
+         content TEXT,
+         description TEXT,
+         format TEXT,
+         FOREIGN KEY(article_id) REFERENCES articles(id),
+         FOREIGN KEY(user_id) REFERENCES users(id)
+      );
     SQL
   end
 
