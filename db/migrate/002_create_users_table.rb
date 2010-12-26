@@ -19,6 +19,6 @@ class CreateUsersTable < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :roles
+    drop_table :users
   end
 end
