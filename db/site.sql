@@ -34,14 +34,15 @@ CREATE TABLE articles(
    FOREIGN KEY(topic_id) REFERENCES topics(id)
 );
 CREATE TABLE revisions(
+   id INTEGER PRIMARY KEY,
    article_id INTEGER,
    user_id INTEGER,
-   date INTEGER, -- epoch
+   epoch INTEGER,
    title TEXT,
    dept TEXT,
-   format TEXT,
    content TEXT,
-   comment TEXT,
+   description TEXT,
+   format TEXT,
    FOREIGN KEY(article_id) REFERENCES articles(id),
    FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -55,14 +56,14 @@ CREATE TABLE comments(
    id INTEGER PRIMARY KEY,
    article_id INTEGER,
    user_id INTEGER,
-   date INTEGER, -- epoch
+   epoch INTEGER,
    title TEXT,
    content TEXT,
    score INTEGER,
    FOREIGN KEY(article_id) REFERENCES articles(id),
    FOREIGN KEY(user_id) REFERENCES users(id)
 );
-CREATE TABLE activity(
+CREATE TABLE events(
    id INTEGER PRIMARY KEY,
    type TEXT,
    message TEXT
