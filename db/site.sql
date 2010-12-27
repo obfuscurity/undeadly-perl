@@ -2,13 +2,13 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE users(
    id INTEGER PRIMARY KEY,
    role_id INTEGER,
-   username TEXT,
-   password TEXT,
-   firstname TEXT,
-   lastname TEXT,
-   email TEXT,
+   username VARCHAR(255),
+   password VARCHAR(255),
+   firstname VARCHAR(255),
+   lastname VARCHAR(255),
+   email VARCHAR(255),
    url TEXT,
-   tz TEXT,
+   tz VARCHAR(255),
    reputation INTEGER,
    FOREIGN KEY(role_id) REFERENCES roles(id)
 );
@@ -30,7 +30,7 @@ CREATE TABLE articles(
    id INTEGER PRIMARY KEY,
    revision_id INTEGER,
    topic_id INTEGER,
-   status TEXT,
+   status VARCHAR(255),
    FOREIGN KEY(revision_id) REFERENCES revisions(id),
    FOREIGN KEY(topic_id) REFERENCES topics(id)
 );
@@ -43,7 +43,7 @@ CREATE TABLE revisions(
    dept TEXT,
    content TEXT,
    description TEXT,
-   format TEXT,
+   format VARCHAR(255),
    FOREIGN KEY(article_id) REFERENCES articles(id),
    FOREIGN KEY(user_id) REFERENCES users(id)
 );

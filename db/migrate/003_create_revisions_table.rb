@@ -10,7 +10,7 @@ class CreateRevisionsTable < ActiveRecord::Migration
          dept TEXT,
          content TEXT,
          description TEXT,
-         format TEXT,
+         format VARCHAR(255),
          FOREIGN KEY(article_id) REFERENCES articles(id),
          FOREIGN KEY(user_id) REFERENCES users(id)
       );

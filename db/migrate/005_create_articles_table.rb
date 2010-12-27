@@ -5,7 +5,7 @@ class CreateArticlesTable < ActiveRecord::Migration
          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
          revision_id INTEGER,
          topic_id INTEGER,
-         status TEXT,
+         status VARCHAR(255),
          FOREIGN KEY(revision_id) REFERENCES revisions(id),
          FOREIGN KEY(topic_id) REFERENCES topics(id)
       );
