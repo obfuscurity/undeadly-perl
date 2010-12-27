@@ -13,6 +13,7 @@ class CreateRolesTable < ActiveRecord::Migration
       t.boolean :create_comments, :default => true
       t.boolean :read_articles, :default => true
     end
+    add_index :roles, :name, :unique => true
   end
 
   def self.down

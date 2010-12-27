@@ -5,6 +5,7 @@ class CreateTopicsTable < ActiveRecord::Migration
       t.text :description
       t.text :url
     end
+    add_index :topics, :name, :unique => true
   end
 
   def self.down
