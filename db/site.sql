@@ -3,6 +3,7 @@ CREATE TABLE users(
    id INTEGER PRIMARY KEY,
    role_id INTEGER,
    username TEXT,
+   password TEXT,
    firstname TEXT,
    lastname TEXT,
    email TEXT,

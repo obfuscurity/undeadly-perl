@@ -5,6 +5,7 @@ class CreateUsersTable < ActiveRecord::Migration
          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
          role_id INTEGER,
          username TEXT,
+         password TEXT,
          firstname TEXT,
          lastname TEXT,
          email TEXT,
