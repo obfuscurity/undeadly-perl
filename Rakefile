@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'active_record'
 require 'yaml'
+require 'logger'
 
 desc 'Load the environment'
 task :environment do
