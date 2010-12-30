@@ -3,14 +3,14 @@ class CreateRevisionsTable < ActiveRecord::Migration
     execute <<-SQL
       CREATE TABLE revisions(
          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-         article_id INTEGER,
-         user_id INTEGER,
-         epoch INTEGER,
-         title TEXT,
-         dept TEXT,
-         content TEXT,
-         description TEXT,
-         format VARCHAR(255),
+         article_id INTEGER NOT NULL,
+         user_id INTEGER NOT NULL,
+         epoch INTEGER NOT NULL,
+         title TEXT NOT NULL,
+         dept TEXT NOT NULL,
+         content TEXT NOT NULL,
+         description TEXT NOT NULL,
+         format VARCHAR(255) NOT NULL,
          FOREIGN KEY(article_id) REFERENCES articles(id),
          FOREIGN KEY(user_id) REFERENCES users(id)
       );

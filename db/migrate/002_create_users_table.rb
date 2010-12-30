@@ -3,15 +3,15 @@ class CreateUsersTable < ActiveRecord::Migration
     execute <<-SQL
       CREATE TABLE users(
          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-         role_id INTEGER,
-         username VARCHAR(255),
-         password VARCHAR(255),
-         firstname VARCHAR(255),
-         lastname VARCHAR(255),
-         email VARCHAR(255),
-         url TEXT,
-         tz VARCHAR(255),
-         reputation INTEGER,
+         role_id INTEGER NOT NULL,
+         username VARCHAR(255) NOT NULL,
+         password VARCHAR(255) NOT NULL,
+         firstname VARCHAR(255) NOT NULL,
+         lastname VARCHAR(255) NOT NULL,
+         email VARCHAR(255) NOT NULL,
+         url TEXT NOT NULL,
+         tz VARCHAR(255) NOT NULL,
+         reputation INTEGER NOT NULL DEFAULT 0,
          FOREIGN KEY(role_id) REFERENCES roles(id)
       );
     SQL

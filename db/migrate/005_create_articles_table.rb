@@ -3,9 +3,9 @@ class CreateArticlesTable < ActiveRecord::Migration
     execute <<-SQL
       CREATE TABLE articles(
          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-         revision_id INTEGER,
-         topic_id INTEGER,
-         status VARCHAR(255),
+         revision_id INTEGER NOT NULL,
+         topic_id INTEGER NOT NULL,
+         status VARCHAR(255) NOT NULL,
          FOREIGN KEY(revision_id) REFERENCES revisions(id),
          FOREIGN KEY(topic_id) REFERENCES topics(id)
       );

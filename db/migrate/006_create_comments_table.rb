@@ -3,12 +3,12 @@ class CreateCommentsTable < ActiveRecord::Migration
     execute <<-SQL
       CREATE TABLE comments(
          id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-         article_id INTEGER,
-         user_id INTEGER,
-         epoch INTEGER,
-         title TEXT,
-         content TEXT,
-         score INTEGER,
+         article_id INTEGER NOT NULL,
+         user_id INTEGER NOT NULL,
+         epoch INTEGER NOT NULL,
+         title TEXT NOT NULL,
+         content TEXT NOT NULL,
+         score INTEGER NOT NULL DEFAULT 0,
          FOREIGN KEY(article_id) REFERENCES articles(id),
          FOREIGN KEY(user_id) REFERENCES users(id)
       );
