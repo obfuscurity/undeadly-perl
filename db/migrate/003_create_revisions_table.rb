@@ -11,6 +11,7 @@ class CreateRevisionsTable < ActiveRecord::Migration
          content TEXT NOT NULL,
          description TEXT NOT NULL,
          format VARCHAR(255) NOT NULL,
+         old_sid INTEGER,
          FOREIGN KEY(article_id) REFERENCES articles(id),
          FOREIGN KEY(user_id) REFERENCES users(id)
       );
