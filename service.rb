@@ -29,7 +29,7 @@ end
 get '/users/:username' do
   @user = User.find_by_username(params[:username])
   if @user
-    erubis 'users/profile'.to_sym
+    erubis 'users/detail'.to_sym
   else
     erubis 'errors/404'.to_sym
   end
