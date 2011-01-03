@@ -8,7 +8,14 @@
 <% if @users %>
 <ul>
   <% @users.each do |user| %>
-  <li><%= user.firstname %>&nbsp;<%= user.lastname %>&nbsp;<%= user.email %>&nbsp;<%= user.url %>&nbsp;<%= user.tz %></li>
+  <li>
+    <a href="/users/<%= user.username %>"><%= user.username %></a>&nbsp;
+    <%= user.firstname %>&nbsp;
+    <%= user.lastname %>&nbsp;
+    <%= user.email %>&nbsp;
+    <%= user.url %>&nbsp;
+    <%= user.tz %>
+  </li>
   <% end %>
 </ul>
 <% end %>
