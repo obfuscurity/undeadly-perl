@@ -67,7 +67,7 @@ get %r{^/(articles|stories)?$} do
   if @articles
     erubis 'articles/detail'.to_sym
   else
-    puts 'no articles yet!'
+    erubis 'articles/list'.to_sym
   end
 end
 
