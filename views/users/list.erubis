@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>User Listing</title>
+</head>
+<body>
+
+<h1>User Listing</h1>
+<% if @users %>
+<ul>
+  <% @users.each do |user| %>
+  <li><%= user.firstname %>&nbsp;<%= user.lastname %>&nbsp;<%= user.email %>&nbsp;<%= user.url %>&nbsp;<%= user.tz %></li>
+  <% end %>
+</ul>
+<% end %>
+
+</body>
+</html>
