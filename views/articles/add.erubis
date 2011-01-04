@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Submit Article</title>
+</head>
+<body>
+
+<h1>Submit Article</h1>
+
+<% if @error %>
+<div id="error"><%= @error %></div>
+<% end %>
+
+<form method="post">
+  <ul>
+    <li><input name="title">Title</li>
+    <li><textarea name="content">Content</li>
+    <li><input name="submit" type="submit" value="Submit"></li>
+  </ul>
+</form>
+
+</body>
+</html>

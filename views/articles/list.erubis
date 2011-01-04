@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Articles</title>
+</head>
+<body>
+
+<h1>Articles</h1>
+<% if @articles %>
+<ul>
+  <% @articles.each do |article| %>
+  <li>
+    <a href="/articles/<%= article.id %>"><%= article.title %></a>&nbsp;
+    <%= article.user %>&nbsp;
+    <%= article.epoch %>&nbsp;
+    <%= article.dept %>&nbsp;
+    <%= article.content %>&nbsp;
+    <%= article.description %>
+    <%= article.format %>
+  </li>
+  <% end %>
+</ul>
+<% else %>
+<p>No articles available.</p>
+<% end %>
+
+</body>
+</html>
