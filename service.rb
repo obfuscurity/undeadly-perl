@@ -71,6 +71,18 @@ get %r{^/(articles|stories)?$} do
   end
 end
 
+# article submission
+post %r{^/(articles|stories)/add' do
+  article = Article.initial_revision({
+    :user => 'jdixon',
+    :title => params[:title],
+    :content => params[:content],
+  })
+  # need to figure out how to flash message to user
+  #@message = 'Thank you for your submission'
+  redirect '/articles'
+end
+
 # unknown
 get '*' do
    erubis 'errors/404'.to_sym
