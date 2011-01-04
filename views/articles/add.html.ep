@@ -6,8 +6,8 @@
 
 <h1>Submit Article</h1>
 
-<% if @error %>
-<div id="error"><%= @error %></div>
+<% if $error %>
+<div id="error"><%= $error %></div>
 <% end %>
 
 <form method="post">
