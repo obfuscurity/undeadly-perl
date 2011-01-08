@@ -7,7 +7,7 @@ CREATE TABLE users(
    firstname VARCHAR(255) NOT NULL,
    lastname VARCHAR(255) NOT NULL,
    email VARCHAR(255) NOT NULL,
-   url TEXT NOT NULL,
+   url VARCHAR(255) NOT NULL,
    tz VARCHAR(255) NOT NULL,
    reputation INTEGER NOT NULL DEFAULT 0,
    FOREIGN KEY(role_id) REFERENCES roles(id)
@@ -15,7 +15,7 @@ CREATE TABLE users(
 INSERT INTO users VALUES (1, 5, 'anonymous', '', '', '', '', '', 'UTC', 0);
 CREATE TABLE roles(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-   name TEXT NOT NULL,
+   name VARCHAR(255) NOT NULL,
    manage_admins BOOLEAN NOT NULL DEFAULT 0,
    manage_editors BOOLEAN NOT NULL DEFAULT 0,
    manage_users BOOLEAN NOT NULL DEFAULT 0,
@@ -47,8 +47,8 @@ CREATE TABLE revisions(
    article_id INTEGER NOT NULL,
    user_id INTEGER NOT NULL,
    epoch INTEGER NOT NULL,
-   title TEXT NOT NULL,
-   dept TEXT NOT NULL,
+   title VARCHAR(255) NOT NULL,
+   dept VARCHAR(255) NOT NULL,
    content TEXT NOT NULL,
    description TEXT NOT NULL,
    format VARCHAR(255) NOT NULL,
@@ -58,9 +58,9 @@ CREATE TABLE revisions(
 );
 CREATE TABLE topics(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-   name TEXT NOT NULL,
+   name VARCHAR(255) NOT NULL,
    description TEXT NOT NULL,
-   image_url TEXT
+   image_url VARCHAR(255)
 );
 CREATE UNIQUE INDEX index_topics_on_name ON topics(name);
 INSERT INTO topics VALUES (1, 'unknown', 'placeholder topic', NULL);
@@ -69,7 +69,7 @@ CREATE TABLE comments(
    article_id INTEGER NOT NULL,
    user_id INTEGER NOT NULL,
    epoch INTEGER NOT NULL,
-   title TEXT NOT NULL,
+   title VARCHAR(255) NOT NULL,
    content TEXT NOT NULL,
    score INTEGER NOT NULL DEFAULT 0,
    FOREIGN KEY(article_id) REFERENCES articles(id),
