@@ -12,6 +12,7 @@ CREATE TABLE users(
    reputation INTEGER NOT NULL DEFAULT 0,
    FOREIGN KEY(role_id) REFERENCES roles(id)
 );
+INSERT INTO users VALUES (1, 5, 'anonymous', '', '', '', '', '', 'UTC', 0);
 CREATE TABLE roles(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name TEXT NOT NULL,
