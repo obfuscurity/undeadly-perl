@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
   columns =>
   [
     id => { type => 'integer', not_null => 1 },
-    name => { type => 'text', not_null => 1 },
+    name => { type => 'varchar', length => 255, not_null => 1 },
     manage_admins => { type => 'boolean', not_null => 1, default => '0' },
     manage_editors => { type => 'boolean', not_null => 1, default => '0' },
     manage_users => { type => 'boolean', not_null => 1, default => '0' },

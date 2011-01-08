@@ -9,9 +9,9 @@ __PACKAGE__->meta->setup(
   columns =>
   [
     id          => { type => 'integer', not_null => 1 },
-    name        => { type => 'text', not_null => 1 },
+    name        => { type => 'varchar', length => 255, not_null => 1 },
     description => { type => 'text', not_null => 1 },
-    image_url   => { type => 'text' },
+    image_url   => { type => 'varchar', length => 255 },
   ],
   pk_columns => 'id',
   unique_key => 'name',

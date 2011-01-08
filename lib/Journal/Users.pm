@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
     firstname  => { type => 'varchar', length => 255, not_null => 1 },
     lastname   => { type => 'varchar', length => 255, not_null => 1 },
     email      => { type => 'varchar', length => 255, not_null => 1 },
-    url        => { type => 'text', not_null => 1 },
+    url        => { type => 'varchar', length => 255, not_null => 1 },
     tz         => { type => 'varchar', length => 255, not_null => 1 },
     reputation => { type => 'integer', not_null => 1, default '0' },
   ],
