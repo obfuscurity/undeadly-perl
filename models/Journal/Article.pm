@@ -4,6 +4,7 @@ package Journal::Article;
 use strict;
 use base qw(Journal::DB::Object);
 
+__PACKAGE__->meta->make_manager_class('articles');
 __PACKAGE__->meta->setup(
   table  => 'articles',
   columns =>

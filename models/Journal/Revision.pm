@@ -4,6 +4,7 @@ package Journal::Revision;
 use strict;
 use base qw(Journal::DB::Object);
 
+__PACKAGE__->meta->make_manager_class('revisions');
 __PACKAGE__->meta->setup(
   table => 'revisions',
   columns =>

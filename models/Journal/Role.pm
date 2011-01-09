@@ -4,6 +4,7 @@ package Journal::Role;
 use strict;
 use base qw(Journal::DB::Object);
 
+__PACKAGE__->meta->make_manager_class('roles');
 __PACKAGE__->meta->setup(
   table => 'roles',
   columns =>

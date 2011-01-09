@@ -4,6 +4,7 @@ package Journal::Event;
 use strict;
 use base qw(Journal::DB::Object);
 
+__PACKAGE__->meta->make_manager_class('events');
 __PACKAGE__->meta->setup(
   table => 'events',
   columns =>

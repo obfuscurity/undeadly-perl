@@ -4,6 +4,7 @@ package Journal::User;
 use strict;
 use base qw(Journal::DB::Object);
 
+__PACKAGE__->meta->make_manager_class('users');
 __PACKAGE__->meta->setup(
   table => 'users',
   columns =>

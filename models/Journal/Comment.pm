@@ -4,6 +4,7 @@ package Journal::Comment;
 use strict;
 use base qw(Journal::DB::Object);
 
+__PACKAGE__->meta->make_manager_class('comments');
 __PACKAGE__->meta->setup(
   table => 'comments',
   columns =>
