@@ -1,5 +1,5 @@
 
-package Journal::Events;
+package Journal::Event;
 
 use strict;
 use base qw(Journal::DB::Object);

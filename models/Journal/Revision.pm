@@ -1,5 +1,5 @@
 
-package Journal::Revisions;
+package Journal::Revision;
 
 use strict;
 use base qw(Journal::DB::Object);
@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
   table => 'revisions',
   columns =>
   [
-    id          => { type => 'integer', not_null => 1 },
+    id          => { type => 'integer', primary_key => 1, not_null => 1 },
     article_id  => { type => 'integer', not_null => 1 },
     user_id     => { type => 'integer', not_null => 1 },
     epoch       => { type => 'integer', not_null => 1 },

@@ -1,5 +1,5 @@
 
-package Journal::Roles;
+package Journal::Role;
 
 use strict;
 use base qw(Journal::DB::Object);

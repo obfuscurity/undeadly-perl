@@ -1,5 +1,5 @@
 
-package Journal::Comments;
+package Journal::Comment;
 
 use strict;
 use base qw(Journal::DB::Object);

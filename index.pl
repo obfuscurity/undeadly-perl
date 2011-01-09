@@ -1,11 +1,9 @@
 
 use strict;
 use Mojolicious::Lite;
-use DBI;
-use DBD::SQLite;
-use Email::Valid;
-use JSON::Any;
 use Data::Dumper;
+
+use lib './models';
 use Journal::Articles;
 use Journal::Users;
 use Journal::Roles;

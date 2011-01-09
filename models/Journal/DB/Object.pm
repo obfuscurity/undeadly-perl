@@ -8,3 +8,4 @@ use base qw(Rose::DB::Object);
 sub init_db { Journal::DB->new }
 
 1;
+
