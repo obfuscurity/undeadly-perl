@@ -3,7 +3,7 @@ use strict;
 use Mojolicious::Lite;
 use Data::Dumper;
 
-use lib './models';
+use lib 'models';
 use Journal::Articles;
 use Journal::Users;
 use Journal::Roles;
