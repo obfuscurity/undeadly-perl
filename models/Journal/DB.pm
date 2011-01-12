@@ -11,7 +11,7 @@ __PACKAGE__->use_private_registry;
 # Register our data source
 __PACKAGE__->register_db(
   driver => 'sqlite',
-  database => './db/production.sqlite'
+  database => 'db/production.sqlite'
 );
 
 1;
