@@ -39,6 +39,7 @@ CREATE TABLE articles(
    revision_id INTEGER NOT NULL,
    topic_id INTEGER NOT NULL,
    status VARCHAR(255) NOT NULL,
+   published_on TEXT,
    FOREIGN KEY(revision_id) REFERENCES revisions(id),
    FOREIGN KEY(topic_id) REFERENCES topics(id)
 );
@@ -46,16 +47,16 @@ CREATE TABLE revisions(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    article_id INTEGER NOT NULL,
    user_id INTEGER NOT NULL,
-   epoch INTEGER NOT NULL,
+   timestamp TEXT NOT NULL,
    title VARCHAR(255) NOT NULL,
    dept VARCHAR(255) NOT NULL,
    content TEXT NOT NULL,
    description TEXT NOT NULL,
    format VARCHAR(255) NOT NULL,
    old_sid INTEGER,
-   FOREIGN KEY(article_id) REFERENCES articles(id),
    FOREIGN KEY(user_id) REFERENCES users(id)
 );
+CREATE INDEX index_revisions_on_article_id ON revisions(article_id);
 CREATE TABLE topics(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name VARCHAR(255) NOT NULL,
@@ -64,11 +65,13 @@ CREATE TABLE topics(
 );
 CREATE UNIQUE INDEX index_topics_on_name ON topics(name);
 INSERT INTO topics VALUES (1, 'unknown', 'placeholder topic', NULL);
+INSERT INTO revisions VALUES (1, 1, 1, '2011-01-01 00:00:00', 'Title', 'Dept', 'Hello World', 'initial submission', 'html', NULL);
+INSERT INTO articles VALUES (1, 1, 1, 'submitted', NULL);
 CREATE TABLE comments(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    article_id INTEGER NOT NULL,
    user_id INTEGER NOT NULL,
-   epoch INTEGER NOT NULL,
+   timestamp TEXT NOT NULL,
    title VARCHAR(255) NOT NULL,
    content TEXT NOT NULL,
    score INTEGER NOT NULL DEFAULT 0,
@@ -77,6 +80,7 @@ CREATE TABLE comments(
 );
 CREATE TABLE events(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   timestamp TEXT NOT NULL,
    type VARCHAR(255) NOT NULL,
    message TEXT NOT NULL
 );

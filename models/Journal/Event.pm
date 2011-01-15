@@ -9,9 +9,10 @@ __PACKAGE__->meta->setup(
   table => 'events',
   columns =>
   [
-    id      => { type => 'integer', not_null => 1 },
-    type    => { type => 'varchar', length => 255, not_null => 1 },
-    message => { type => 'text', not_null => 1 },
+    id        => { type => 'integer', not_null => 1 },
+    timestamp => { type => 'text', not_null => 1 },
+    type      => { type => 'varchar', length => 255, not_null => 1 },
+    message   => { type => 'text', not_null => 1 },
   ],
   pk_columns => 'id',
 );

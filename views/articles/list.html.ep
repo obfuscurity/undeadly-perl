@@ -5,11 +5,16 @@
 <body>
 
 <h1>Articles</h1>
-<% if ($articles) { %>
+
+<% if (my $message = flash 'message') { %>
+<span class="message"><%= $message %></span>
+<% } %>
+
+<% if (@$articles) { %>
 <ul>
   <% for my $article (@{$articles}) { %>
   <li>
-    <a href="/articles/<%= article.id'} %>"><%= $article->{'title'} %></a>&nbsp;
+    <a href="/articles/<%= $article->{'id'} %>"><%= $article->{'title'} %></a>&nbsp;
     <%= $article->{'user'} %>&nbsp;
     <%= $article->{'epoch'} %>&nbsp;
     <%= $article->{'dept'} %>&nbsp;
@@ -19,8 +24,6 @@
   </li>
   <% } %>
 </ul>
-<% } else { %>
-<p>No articles found.</p>
 <% } %>
 
 </body>
