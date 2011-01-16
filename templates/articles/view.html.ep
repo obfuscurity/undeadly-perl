@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Article View</title>
+</head>
+<body>
+
+<h1><%= $article->{'title'} %></h1>
+
+<% if (my $message = flash 'message') { %>
+<span class="message"><%= $message %></span>
+<% } %>
+
+<ul>
+  <li>
+    <a href="/articles/<%= $article->{'id'} %>"><%= $article->{'title'} %></a>&nbsp;
+    <%= $article->{'username'} %>&nbsp;
+    <%= $article->{'published_on'} %>&nbsp;
+    <%= $article->{'dept'} %>&nbsp;
+    <%= $article->{'content'} %>&nbsp;
+    <%= $article->{'description'} %>
+    <%= $article->{'format'} %>
+  </li>
+</ul>
+
+</body>
+</html>
