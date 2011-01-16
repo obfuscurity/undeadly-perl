@@ -4,6 +4,7 @@ package Journal::DB;
 use strict;
 use DBI;
 use Journal::Config;
+use Data::Dumper;
 
 use vars qw( $dbh $is_connected );
 
@@ -22,7 +23,7 @@ sub connect {
     $is_connected = 0;
   }
 
-  $dbh = DBI->connect(Journal::Config::dsn);
+  $dbh = DBI->connect($Journal::Config::dsn) || die $DBI::errstr;
 
   return $dbh;
 }

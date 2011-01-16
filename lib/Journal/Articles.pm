@@ -5,6 +5,7 @@ use strict;
 use Journal::DB;
 use Journal::Events;
 use Journal::Utils::Timestamp;
+use Data::Dumper;
 
 use vars qw( $event $timer );
 
@@ -22,7 +23,7 @@ sub create {
   my $self = shift;
   my %args = @_;
 
-  my $dbh = Journal::DB->connect;
+  my $dbh = Journal::DB::connect;
   {
     my $query = "INSERT INTO revisions VALUES (NULL, 0, ?,?,?,?,?,?,?, NULL)";
     my $sth = $dbh->prepare($query);
@@ -57,7 +58,7 @@ sub find_all {
   my %args = @_;
 
   my $dbh = Journal::DB->connect;
-  my $query = "SELECT a.id, a.published_on
+  my $query = "SELECT a.id, a.published_on,
                       r.timestamp, r.title, r.dept, r.content, r.description, r.format,
                       t.name, t.description AS topic_description, t.image_url, u.username
                 FROM articles a, revisions r, topics t, users u
@@ -65,7 +66,7 @@ sub find_all {
                 AND a.revision_id=r.id
                 AND a.topic_id=t.id
                 AND r.user_id=u.id
-                ORDER BY 
+                ORDER BY a.published_on DESC
                 LIMIT ?";
   my $sth = $dbh->prepare($query);
 
@@ -74,9 +75,12 @@ sub find_all {
     ($args{'limit'} || 10),
   ) || die $dbh->errstr;
 
-  my $articles = $sth->fetchall_arrayref;
+  my @articles;
+  while (my $result = $sth->fetchrow_hashref) {
+    push(@articles, $result);
+  }
 
-  return $articles;
+  return \@articles;
 }
 
 sub find {

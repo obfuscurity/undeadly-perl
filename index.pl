@@ -4,8 +4,10 @@ use Mojolicious::Lite;
 use Data::Dumper;
 
 use lib qw(lib);
+use Journal::Articles;
 use Journal::DB;
-use Journal::Event;
+use Journal::Events;
+use Journal::Users;
 use Journal::Utils::Timestamp;
 
 use vars qw( $event $timer );
@@ -14,11 +16,6 @@ BEGIN {
   $event = Journal::Events->new;
   $timer = Journal::Utils::Timestamp->new;
 }
-
-# retrieve user and role info
-### long-term, we need a way to ###
-###  cache anonymous user data  ###
-my $user = Journal::User->find($self->session('username') || 'anonymous');
 
 # log startup
 $event->logger( type => 'system', message => 'starting server');
@@ -33,6 +30,8 @@ get '/login' => sub {
 # login submission
 post '/login' => sub {
   my $self = shift;
+  # retrieve user and role info
+  my $user = Journal::Users::find($self->session('username') || 'anonymous');
   if ($user->authenticates(
     username => $self->param('username'),
     password => $self->param('password'),
@@ -56,7 +55,7 @@ get '/logout' => sub {
 # front page
 get '/' => sub {
   my $self = shift;
-  my $articles = Journal::Articles->find_all( status => 'published' );
+  my $articles = Journal::Articles->find_all( status => 'submitted' );
   $self->stash( articles => $articles );
   $self->flash( message => 'No articles found' ) unless (@$articles);
   $self->render( controller => 'articles', action => 'list' );
@@ -71,7 +70,7 @@ get '/articles' => sub {
 # full article view
 get '/articles/:id' => sub {
   my $self = shift;
-  my $article = Journal::Article->find( id => $self->param('id') );
+  my $article = Journal::Articles->find( id => $self->param('id') );
   if ($article) {
     $self->stash( article => $article );
     $self->render( controller => 'articles', action => 'view' );
@@ -90,7 +89,9 @@ get '/articles/add' => sub {
 # article submission
 post '/articles/add' => sub {
   my $self = shift;
-  my $success = Journal::Article->create(
+  # retrieve user and role info
+  my $user = Journal::Users::find($self->session('username') || 'anonymous');
+  my $success = Journal::Articles->create(
     user_id => $user->{'id'},
     title => $self->param('title'),
     dept => $self->param('dept'),
@@ -100,5 +101,6 @@ post '/articles/add' => sub {
   $self->redirect_to('index');
 } => 'article_submit';
 
+app->secret('k7oiefbiwofi43o9fhaw');
 app->start;
 

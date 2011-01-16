@@ -15,8 +15,8 @@
   <% for my $article (@{$articles}) { %>
   <li>
     <a href="/articles/<%= $article->{'id'} %>"><%= $article->{'title'} %></a>&nbsp;
-    <%= $article->{'user'} %>&nbsp;
-    <%= $article->{'epoch'} %>&nbsp;
+    <%= $article->{'username'} %>&nbsp;
+    <%= $article->{'published_on'} %>&nbsp;
     <%= $article->{'dept'} %>&nbsp;
     <%= $article->{'content'} %>&nbsp;
     <%= $article->{'description'} %>
