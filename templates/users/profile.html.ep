@@ -1,0 +1,22 @@
+<%= include 'header', title => 'User Profile' %>
+
+  <h2>User Profile - <%= $user->{'username'} %></h2>
+
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
+
+  <div id="main">
+    <form>
+      <ul>
+        <li><%= $user->{'firstname'} %></li>
+        <li><%= $user->{'lastname'} %></li>
+        <li><%= $user->{'email'} %></li>
+        <li><%= $user->{'url'} %></li>
+        <li><%= $user->{'tz'} %></li>
+      </ul>
+    </form>
+  </div>
+
+</body>
+</html>

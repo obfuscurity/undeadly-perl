@@ -1,0 +1,9 @@
+<%= include 'header', title => '404 Page not Found' %>
+
+  <h2>Page not Found</h2>
+
+  <div id="main">
+    <p>404 error</p>
+  </div>
+
+<%= include 'footer' %>

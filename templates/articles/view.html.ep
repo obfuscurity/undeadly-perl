@@ -1,26 +1,23 @@
-<html>
-<head>
-<title>Article View</title>
-</head>
-<body>
+<%= include 'header', title => 'View Article' %>
 
-<h1><%= $article->{'title'} %></h1>
+  <h2><%= $article->{'title'} %></h2>
 
-<% if (my $message = flash 'message') { %>
-<span class="message"><%= $message %></span>
-<% } %>
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
 
-<ul>
-  <li>
-    <a href="/articles/<%= $article->{'id'} %>"><%= $article->{'title'} %></a>&nbsp;
-    <%= $article->{'username'} %>&nbsp;
-    <%= $article->{'published_on'} %>&nbsp;
-    <%= $article->{'dept'} %>&nbsp;
-    <%= $article->{'content'} %>&nbsp;
-    <%= $article->{'description'} %>
-    <%= $article->{'format'} %>
-  </li>
-</ul>
+  <div id="main">
+    <ul>
+      <li>
+        <a href="/articles/<%= $article->{'id'} %>"><%= $article->{'title'} %></a>&nbsp;
+        <%= $article->{'username'} %>&nbsp;
+        <%= $article->{'published_on'} %>&nbsp;
+        <%= $article->{'dept'} %>&nbsp;
+        <%= $article->{'content'} %>&nbsp;
+        <%= $article->{'description'} %>
+        <%= $article->{'format'} %>
+      </li>
+    </ul>
+  </div>
 
-</body>
-</html>
+<%= include 'footer' %>

@@ -1,22 +1,19 @@
-<html>
-<head>
-<title>Submit Article</title>
-</head>
-<body>
+<%= include 'header', title => 'Submit Article' %>
 
-<h1>Submit Article</h1>
+  <h2>Submit Article</h2>
 
-<% if $error %>
-<div id="error"><%= $error %></div>
-<% end %>
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
 
-<form method="post">
-  <ul>
-    <li><input name="title">Title</li>
-    <li><textarea name="content">Content</li>
-    <li><input name="submit" type="submit" value="Submit"></li>
-  </ul>
-</form>
+  <div id="main">
+    <form method="post">
+      <ul>
+        <li><input name="title" />Title</li>
+        <li><textarea name="content" />Content</li>
+        <li><input name="submit" type="submit" value="Submit Article" /></li>
+      </ul>
+    </form>
+  </div>
 
-</body>
-</html>
+<%= include 'footer' %>

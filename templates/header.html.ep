@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>OpenBSD Journal - <%= $title %></title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="stylesheet" href="http://f.fontdeck.com/s/css/uH5+KWQnibDTJRYggGJ9XZLTAgw/web1.netflo.ws/2234.css?1" type="text/css" />
+  <script type="text/javascript" src="/protovis-r3.2.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="banner">
+  <div id="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/devices">Devices</a></li>
+    <% if ($self->session('username')) { %>
+      <li><a href="/user/profile"><%= $self->session('username') %></a></li>
+      <li><a href="/logout">Logout</a></li>
+    <% } else { %>
+      <li><a href="/login">Login</a></li>
+    <% } %>
+    </ul>
+  </div>
+</div>
+
+<div id="wrapper">
+  <div id="logo">
+    <h1>OpenBSD Journal</h1>
+  </div>
+
