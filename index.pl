@@ -8,17 +8,19 @@ use Journal::Articles;
 use Journal::DB;
 use Journal::Events;
 use Journal::Users;
-use Journal::Utils::Timestamp;
 
-use vars qw( $event $timer );
+use vars qw( $event $user );
 
 BEGIN {
   $event = Journal::Events->new;
-  $timer = Journal::Utils::Timestamp->new;
+  $event->logger( type => 'system', message => 'starting server');
 }
 
-# log startup
-$event->logger( type => 'system', message => 'starting server');
+# get user details, if possible
+app->hook(after_static_dispatch => sub {
+  my $self = shift;
+  $user = Journal::Users->find( username => ($self->session('username') || 'anonymous') );
+});
 
 # login form
 get '/login' => sub {
@@ -30,8 +32,6 @@ get '/login' => sub {
 # login submission
 post '/login' => sub {
   my $self = shift;
-  # retrieve user and role info
-  my $user = Journal::Users::find($self->session('username') || 'anonymous');
   if ($user->authenticates(
     username => $self->param('username'),
     password => $self->param('password'),
@@ -48,6 +48,7 @@ post '/login' => sub {
 # logout
 get '/logout' => sub {
   my $self = shift;
+  return $self->redirect_to('index') unless $self->session('username');
   $self->session( expires => 1 );
   $self->redirect_to('login_form');
 } => 'logout';
@@ -89,8 +90,6 @@ get '/articles/add' => sub {
 # article submission
 post '/articles/add' => sub {
   my $self = shift;
-  # retrieve user and role info
-  my $user = Journal::Users::find($self->session('username') || 'anonymous');
   my $success = Journal::Articles->create(
     user_id => $user->{'id'},
     title => $self->param('title'),
