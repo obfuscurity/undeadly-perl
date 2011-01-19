@@ -10,6 +10,11 @@ CREATE TABLE users(
    url VARCHAR(255) NOT NULL,
    tz VARCHAR(255) NOT NULL,
    reputation INTEGER NOT NULL DEFAULT 0,
+   api_token VARCHAR(40) NOT NULL,
+   confirm_token VARCHAR(40) NOT NULL,
+   confirmed_on TEXT,
+   registered_on TEXT NOT NULL,
+   last_login_on TEXT,
    FOREIGN KEY(role_id) REFERENCES roles(id)
 );
 CREATE TABLE roles(
@@ -25,15 +30,16 @@ CREATE TABLE roles(
    edit_comments BOOLEAN NOT NULL DEFAULT 0,
    delete_comments BOOLEAN NOT NULL DEFAULT 0,
    create_comments BOOLEAN NOT NULL DEFAULT 0,
-   read_comments BOOLEAN NOT NULL DEFAULT 1
+   read_comments BOOLEAN NOT NULL DEFAULT 1,
+   can_login BOOLEAN NOT NULL DEFAULT 0
 );
 CREATE UNIQUE INDEX index_roles_on_name ON roles(name);
-INSERT INTO roles VALUES (1, 'superuser', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-INSERT INTO roles VALUES (2, 'admin', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-INSERT INTO roles VALUES (3, 'editor', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
-INSERT INTO roles VALUES (4, 'normal', 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1);
-INSERT INTO roles VALUES (5, 'readonly', 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1);
-INSERT INTO users VALUES (1, 5, 'anonymous', '', '', '', '', '', 'UTC', 0);
+INSERT INTO roles VALUES (1, 'superuser', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+INSERT INTO roles VALUES (2, 'admin', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+INSERT INTO roles VALUES (3, 'editor', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+INSERT INTO roles VALUES (4, 'normal', 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1);
+INSERT INTO roles VALUES (5, 'readonly', 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1);
+INSERT INTO users VALUES (1, 5, 'anonymous', '', '', '', '', '', 'UTC', 0, 0);
 CREATE TABLE articles(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    revision_id INTEGER NOT NULL,

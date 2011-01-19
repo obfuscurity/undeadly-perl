@@ -14,7 +14,6 @@
   <div id="nav">
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/devices">Devices</a></li>
     <% if ($self->session('username')) { %>
       <li><a href="/user/profile"><%= $self->session('username') %></a></li>
       <li><a href="/logout">Logout</a></li>
