@@ -104,28 +104,28 @@ sub create {
 
   # validate user input
   unless ($user->{'username'} =~ /[\w+]{3,12}/) {
-    return (undef, 'Usernames must be 3-12 letters long.'};
+    return (undef, 'Usernames must be 3-12 letters long.');
   }
   unless ($user->{'password1'} =~ /[\S+]{6,12}/) {
-    return (undef, 'Passwords must be 6-12 characters long.'};
+    return (undef, 'Passwords must be 6-12 characters long.');
   }
   unless ($user->{'password2'} =~ /[\S+]{6,12}/) {
-    return (undef, 'Passwords must be 6-12 characters long.'};
+    return (undef, 'Passwords must be 6-12 characters long.');
   }
-  unless ($user->{'password1'} eq $self->param('password2')) {
-    return (undef, 'Passwords do not match.'};
+  unless ($user->{'password1'} eq $user->{'password2'}) {
+    return (undef, 'Passwords do not match.');
   }
   unless ($user->{'firstname'} =~ /[\w+]{1,20}/) {
-    return (undef, 'Firstname must be 1-20 letters long.'};
+    return (undef, 'Firstname must be 1-20 letters long.');
   }
   unless ($user->{'lastname'} =~ /[\w+]{1,40}/) {
-    return (undef, 'Lastname must be 1-40 letters long.'};
+    return (undef, 'Lastname must be 1-40 letters long.');
   }
   unless (Email::Valid->address($user->{'email'})) {
-    return (undef, 'Email format is invalid, please try again.'};
+    return (undef, 'Email format is invalid, please try again.');
   }
-  unless ($user->{'url'} =~ /^(https?)://.+$/) {
-    return (undef, 'URL must be http or https, no longer than 255 characters.'};
+  unless ($user->{'url'} =~ /^(https?):\/\/[\w+\d+]$/) {
+    return (undef, 'URL must be http or https, no longer than 255 characters.');
   }
   unless (DateTime::TimeZone->is_valid_name($user->{'tz'})) {
     return (undef, 'Timezone must be a valid timezone name.');
@@ -144,12 +144,12 @@ sub create {
   }
 
   my $ug = Data::UUID->new;
-  my $api_token = $ug->create_str;
-  my $confirm_token = $ug->create_str;
+  $user->{'api_token'} = $ug->create_str;
+  $user->{'confirm_token'} = $ug->create_str;
 
   # store user data
   {
-    my $query = "INSERT INTO users VALUES (NULL, 4, ?,?,?,?,?,?,?, 0, ?,?, NULL, ?, NULL);
+    my $query = "INSERT INTO users VALUES (NULL, 4, ?,?,?,?,?,?,?, 0, ?,?, NULL, ?, NULL)";
     my $sth = $dbh->prepare($query);
     $sth->execute(
       $user->{'username'},
@@ -159,8 +159,8 @@ sub create {
       $user->{'email'},
       $user->{'url'},
       $user->{'tz'},
-      $api_token,
-      $confirm_token,
+      $user->{'api_token'},
+      $user->{'confirm_token'},
       $timer->gmtime,
     ) || die $dbh->errstr;
   }
@@ -170,6 +170,8 @@ sub create {
 
 sub send_confirmation_email {
   my $self = shift;
+  my $url = $Journal::Config::url;
+  my $postmark_token = $Journal::Config::postmark_token;
 
   my $message = {
     From => 'OpenBSD Journal <signup@undeadly.org>',
@@ -177,10 +179,10 @@ sub send_confirmation_email {
     Subject => 'OpenBSD Journal Confirmation',
   };
 
-  $message->{'TextBody'} = "Hello " . $user->{'firstname'} . ",\n\n" .
-    "Click the following link to complete your registration" .
+  $message->{'TextBody'} = 'Hello ' . $self->{'firstname'} . ",\n\n" .
+    'Click the following link to complete your registration' .
     "and begin using your OpenBSD Journal user account.\n\n" .
-    $url . '/user/' . $self->{'username'} . '/confirm/' . $confirm_token . "\n\n" .
+    $url . '/user/' . $self->{'username'} . '/confirm/' . $self->{'confirm_token'} . "\n\n" .
     "If you have any questions please reply to this email.\n\n" .
     "Thanks,\n\n--\nOpenBSD Journal\nsignup\@undeadly.org";
 
