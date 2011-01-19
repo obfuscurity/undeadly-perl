@@ -52,7 +52,7 @@ sub authenticate {
   $sth->execute($username) || die $dbh->errstr;
 
   my $result = $sth->fetchrow_hashref;
-  my $valid_password = Journal::User::Auth::validate_pass(
+  my $valid_password = Journal::Users::Auth::validate_pass(
     plain => $password,
     hashpw => $result->{'password'}
   );
@@ -153,7 +153,7 @@ sub create {
     my $sth = $dbh->prepare($query);
     $sth->execute(
       $user->{'username'},
-      Journal::User::Auth::generate_pass( $user->{'password'} ),
+      Journal::Users::Auth::generate_pass( $user->{'password'} ),
       $user->{'firstname'},
       $user->{'lastname'},
       $user->{'email'},

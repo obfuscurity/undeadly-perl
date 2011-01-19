@@ -1,15 +1,9 @@
 
-package Journal::User::Auth;
+package Journal::Users::Auth;
 
 use strict;
 use Digest::SHA;
 use MIME::Base64;
-
-#my $hashpw = generate_pass( plain => 'foobar', salt => _generate_salt() );
-#print "$hashpw\n";
-#my $salt = _extract_salt($hashpw);
-#my $testpw = generate_pass( plain => 'foobar', salt => $salt );
-#print "$testpw\n";
 
 sub generate_pass {
   my %args = @_;
