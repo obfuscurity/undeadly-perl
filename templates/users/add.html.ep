@@ -15,8 +15,8 @@
       <li><input name="email">Email</li>
       <li><input name="url">URL</li>
       <li><input name="tz">Timezone</li>
-      <li><input name="password1">Password</li>
-      <li><input name="password2">Password repeat</li>
+      <li><input name="password1" type="password">Password</li>
+      <li><input name="password2" type="password">Password repeat</li>
       <li><input name="submit" type="submit" value="Add User"></li>
     </ul>
   </form>

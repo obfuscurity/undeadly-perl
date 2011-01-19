@@ -26,7 +26,7 @@ app->hook(after_static_dispatch => sub {
 get '/login' => sub {
   my $self = shift;
   return $self->redirect_to('index') if $self->session('username');
-  $self->render;
+  return $self->render;
 } => 'login';
 
 # login submission
@@ -59,7 +59,7 @@ get '/' => sub {
   my $articles = Journal::Articles->find_all( status => 'submitted' );
   $self->stash( articles => $articles );
   $self->flash( message => 'No articles found' ) unless (@$articles);
-  $self->render( controller => 'articles', action => 'list' );
+  return $self->render( controller => 'articles', action => 'list' );
 } => 'index';
 
 # article list, redirect to index
@@ -84,7 +84,7 @@ get '/articles/:id' => ([id => qr/\d+/]) => sub {
 # article form
 get '/articles/add' => sub {
   my $self = shift;
-  $self->render( controller => 'articles', action => 'add' );
+  return $self->render;
 } => 'article_add';
 
 # article submission
@@ -101,17 +101,17 @@ post '/articles/add' => sub {
 };
 
 # user add form
-get '/user/add' => sub {
+get '/users/add' => sub {
   my $self = shift;
   if ($self->session('username')) {
     $self->flash( message => sprintf("You are already logged in as %s.", $self->session('username')) );
     return $self->redirect_to('index');
   }
-  return $self->render( controller => 'user', action => 'add' );
+  return $self->render;
 } => 'user_add';
 
 # user add submission
-post '/user/add' => sub {
+post '/users/add' => sub {
   my $self = shift;
   my ($user, $error) = Journal::Users->create(
     username => $self->param('username'),
@@ -124,7 +124,7 @@ post '/user/add' => sub {
     tz => $self->param('tz'),
   );
   if ($user) {
-    return $self->redirect_to('confirm_email');
+    return $self->redirect_to('user_confirm');
   } else {
     $self->flash( message => $error );
     return $self->redirect_to('user_add');
@@ -132,7 +132,7 @@ post '/user/add' => sub {
 };
 
 # confirmation post
-post '/user/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
+post '/users/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
   my $self = shift;
   my ($success, $error) = $user->confirm_email(
     username => $self->param('id'),
@@ -143,22 +143,22 @@ post '/user/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
     return $self->redirect_to('index');
   } else {
     $self->flash( message => $error );
-    return $self->redirect_to('confirm_email');
+    return $self->redirect_to('user_confirm');
   }
 };
 
 # confirmation request page
-get '/user/:id/confirm' => ([id => qr/\w+/]) => sub {
+get '/users/confirm' => ([id => qr/\w+/]) => sub {
   my $self = shift;
   if ( $self->session('username') && $user->{'confirmed_on'} ) {
     $self->flash( message => 'Your email has already been confirmed.' );
     return $self->redirect_to('index');
   }
-  return $self->render( controller => 'user', action => 'confirm' );
-} => 'confirm_email';
+  return $self->render;
+} => 'user_confirm';
 
 # confirmation request submission
-post '/user/:id/confirm' => ([id => qr/\w+/]) => sub {
+post '/users/:id/confirm' => ([id => qr/\w+/]) => sub {
   my $self = shift;
   my ($delivery, $error) = $user->send_confirmation_email;
   if ($delivery) {

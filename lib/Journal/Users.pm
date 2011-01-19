@@ -13,6 +13,7 @@ use MIME::Base64;
 
 use Journal::DB;
 use Journal::Events;
+use Journal::Users::Auth;
 use Data::Dumper;
 
 use vars qw( $event $timer );
@@ -124,7 +125,7 @@ sub create {
   unless (Email::Valid->address($user->{'email'})) {
     return (undef, 'Email format is invalid, please try again.');
   }
-  unless ($user->{'url'} =~ /^(https?):\/\/[\w+\d+]$/) {
+  unless ($user->{'url'} =~ /^(https?):\/\/\S+$/) {
     return (undef, 'URL must be http or https, no longer than 255 characters.');
   }
   unless (DateTime::TimeZone->is_valid_name($user->{'tz'})) {
@@ -138,7 +139,8 @@ sub create {
     my $query = "SELECT username FROM users WHERE username=?";
     my $sth = $dbh->prepare($query);
     $sth->execute( $user->{'username'} ) || $dbh->errstr;
-    if ($sth->fetchrow_hashref->{'username'}) {
+    my $result = $sth->fetchrow_hashref;
+    if ($result->{'username'}) {
       return (undef, 'Username already exists.');
     }
   }
@@ -151,9 +153,10 @@ sub create {
   {
     my $query = "INSERT INTO users VALUES (NULL, 4, ?,?,?,?,?,?,?, 0, ?,?, NULL, ?, NULL)";
     my $sth = $dbh->prepare($query);
+    my $password = Journal::Users::Auth::generate_pass( $user->{'password1'} );
     $sth->execute(
       $user->{'username'},
-      Journal::Users::Auth::generate_pass( $user->{'password'} ),
+      Journal::Users::Auth::generate_pass( $user->{'password1'} ),
       $user->{'firstname'},
       $user->{'lastname'},
       $user->{'email'},

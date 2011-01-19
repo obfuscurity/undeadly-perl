@@ -39,7 +39,7 @@ INSERT INTO roles VALUES (2, 'admin', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 INSERT INTO roles VALUES (3, 'editor', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 INSERT INTO roles VALUES (4, 'normal', 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1);
 INSERT INTO roles VALUES (5, 'readonly', 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1);
-INSERT INTO users VALUES (1, 5, 'anonymous', '', '', '', '', '', 'UTC', 0, 0);
+INSERT INTO users VALUES (1, 5, 'anonymous', '', '', '', '', '', 'UTC', 0, '', '', '', '', '');
 CREATE TABLE articles(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    revision_id INTEGER NOT NULL,
