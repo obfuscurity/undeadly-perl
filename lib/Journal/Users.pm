@@ -6,14 +6,11 @@ use Data::UUID;
 use DateTime::TimeZone;
 use Digest::SHA;
 use Email::Valid;
-use HTTP::Request;
-use JSON::Any;
-use LWP::UserAgent;
-use MIME::Base64;
 
 use Journal::DB;
 use Journal::Events;
 use Journal::Users::Auth;
+use Journal::SMTP;
 use Data::Dumper;
 
 use vars qw( $event $timer );
@@ -110,31 +107,31 @@ sub create {
 
   # validate user input
   unless ($user->{'username'} =~ /[\w+]{3,12}/) {
-    return (undef, 'Usernames must be 3-12 letters long.');
+    return (0, 'Usernames must be 3-12 letters long.');
   }
   unless ($user->{'password1'} =~ /[\S+]{6,12}/) {
-    return (undef, 'Passwords must be 6-12 characters long.');
+    return (0, 'Passwords must be 6-12 characters long.');
   }
   unless ($user->{'password2'} =~ /[\S+]{6,12}/) {
-    return (undef, 'Passwords must be 6-12 characters long.');
+    return (0, 'Passwords must be 6-12 characters long.');
   }
   unless ($user->{'password1'} eq $user->{'password2'}) {
-    return (undef, 'Passwords do not match.');
+    return (0, 'Passwords do not match.');
   }
   unless ($user->{'firstname'} =~ /[\w+]{1,20}/) {
-    return (undef, 'Firstname must be 1-20 letters long.');
+    return (0, 'Firstname must be 1-20 letters long.');
   }
   unless ($user->{'lastname'} =~ /[\w+]{1,40}/) {
-    return (undef, 'Lastname must be 1-40 letters long.');
+    return (0, 'Lastname must be 1-40 letters long.');
   }
   unless (Email::Valid->address($user->{'email'})) {
-    return (undef, 'Email format is invalid, please try again.');
+    return (0, 'Email format is invalid, please try again.');
   }
   unless ($user->{'url'} =~ /^(https?):\/\/\S+$/) {
-    return (undef, 'URL must be http or https, no longer than 255 characters.');
+    return (0, 'URL must be http or https, no longer than 255 characters.');
   }
   unless (DateTime::TimeZone->is_valid_name($user->{'tz'})) {
-    return (undef, 'Timezone must be a valid timezone name.');
+    return (0, 'Timezone must be a valid timezone name.');
   }
 
   my $dbh = Journal::DB->connect;
@@ -146,7 +143,7 @@ sub create {
     $sth->execute( $user->{'username'} ) || $dbh->errstr;
     my $result = $sth->fetchrow_hashref;
     if ($result->{'username'}) {
-      return (undef, 'Username already exists.');
+      return (0, 'Username already exists.');
     }
   }
 
@@ -181,51 +178,34 @@ sub send_confirmation_email {
   my $class = shift;
   my %args = @_;
   my $username = $args{'username'};
-
   my $url = $Journal::Config::url;
-  my $postmark_token = $Journal::Config::postmark_token;
 
   my $dbh = Journal::DB->connect;
-  my $query = "SELECT firstname, email, confirm_token FROM users WHERE username=?";
+  my $query = "SELECT firstname, lastname, email, confirm_token FROM users WHERE username=?";
   my $sth = $dbh->prepare($query);
   $sth->execute($username) || die $dbh->errstr;
   my $result = $sth->fetchrow_hashref;
 
-  my $message = {
-    From => 'OpenBSD Journal <signup@undeadly.org>',
-    To => $result->{'email'},
-    Subject => 'OpenBSD Journal Confirmation',
-  };
-
-  $message->{'TextBody'} = 'Hello ' . $result->{'firstname'} . ",\n\n" .
-    "Click the following link to complete your registration\n" .
-    "and begin using your OpenBSD Journal user account.\n\n" .
-    $url . '/users/' . $username . '/confirm/' . $result->{'confirm_token'} . "\n\n" .
-    "If you have any questions please reply to this email.\n\n" .
-    "Thanks,\n\n--\nOpenBSD Journal\nhttp://undeadly.org/";
-
-  my $json = JSON::Any->new;
-  my $ua = LWP::UserAgent->new( timeout => 30 );
-  my $req = HTTP::Request->new(
-    'post',
-    'http://api.postmarkapp.com/email',
-    [
-      'Accept' => 'application/json',
-      'Content-Type' => 'application/json',
-      'X-Postmark-Server-Token' => $postmark_token,
-    ],
-    $json->to_json($message),
+  my $smtp = Journal::SMTP->new;
+  my ($delivery, $error) = $smtp->send(
+    route => 'local',
+    sender => 'signup@undeadly.org',
+    recipient => $result->{'email'},
+    from => 'OpenBSD Journal <signup@undeadly.org>',
+    to => sprintf("%s %s <%s>", $result->{'firstname'}, $result->{'lastname'}, $result->{'email'}),
+    subject => 'OpenBSD Journal Confirmation',
+    body => , 'Hello ' . $result->{'firstname'} . ",\n\n" .
+      "Click the following link to complete your registration\n" .
+      "and begin using your OpenBSD Journal user account.\n\n" .
+      $url . '/users/' . $username . '/confirm/' . $result->{'confirm_token'} . "\n\n" .
+      "If you have any questions please reply to this email.\n\n" .
+      "Thanks,\n\n--\nOpenBSD Journal\nhttp://undeadly.org/",
   );
-  my $resp = $ua->request($req);
 
-  if ($resp->is_success) {
+  if ($delivery) {
     return (1, undef);
   } else {
-    $event->logger(
-      type => 'system',
-      message => sprintf("Unable to send confirmation email: %s", $resp->status_line),
-    );
-    return (0, "We encountered a problem sending out your Email confirmation. Please wait a few minutes and then <a href=\"$url/users/confirm\">click here</a> to resend your confirmation.");
+    return (0, $error);
   }
 }
 
@@ -243,7 +223,7 @@ sub confirm_email {
   if ($sth->rows == 1) {
     return (1, undef);
   } else {
-    return (undef, 'We were unable to confirm your email. Please try your confirmation link again, request a new confirmation link below, or contact our support team for assistance.');
+    return (0, 'We were unable to confirm your email. Please try your confirmation link again, request a new confirmation link below, or contact our support team for assistance.');
   }
 }
 

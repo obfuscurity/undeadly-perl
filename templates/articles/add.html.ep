@@ -10,7 +10,8 @@
     <form method="post">
       <ul>
         <li><input name="title" />Title</li>
-        <li><textarea name="content" />Content</li>
+        <li><input name="dept" />Dept</li>
+        <li><textarea name="content"></textarea>Content</li>
         <li><input name="submit" type="submit" value="Submit Article" /></li>
       </ul>
     </form>

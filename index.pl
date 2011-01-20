@@ -77,7 +77,7 @@ get '/articles/:id' => ([id => qr/\d+/]) => sub {
 # article form
 get '/articles/add' => sub {
   my $self = shift;
-  return $self->render;
+  return $self->render( controller => 'articles', action => 'add' );
 } => 'article_add';
 
 # article submission
@@ -166,7 +166,7 @@ post '/users/confirm' => ([id => qr/\w+/]) => sub {
     return $self->redirect_to('index');
   } else {
     $self->flash( message => $error );
-    return $self->redirect_to('index');
+    return $self->redirect_to('user_confirm');
   }
 };
 
