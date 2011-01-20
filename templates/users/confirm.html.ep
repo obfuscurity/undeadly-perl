@@ -1,12 +1,18 @@
-<html>
-<head>
-<title>User Confirmation</title>
-</head>
-<body>
+<%= include 'header', title => 'User Confirmation' %>
 
-<h1>User Confirmation</h1>
-<form>
-</form>
+  <h2>User Confirmation</h2>
 
-</body>
-</html>
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
+
+  <div id="main">
+    <form method="post">
+      <ul>
+        <li><input name="username">Username</li>
+        <li><input name="submit" type="submit" value="Resend Confirmation Link"></li>
+      </ul>
+    </form>
+  </div>
+
+<%= include 'footer' %>

@@ -124,45 +124,52 @@ post '/users/add' => sub {
     tz => $self->param('tz'),
   );
   if ($user) {
-    return $self->redirect_to('user_confirm');
+    my ($delivery, $error) = Journal::Users->send_confirmation_email( username => $self->param('username') );
+    if ($delivery) {
+      $self->flash( message => 'Please check your inbox for a confirmation email.' );
+      return $self->redirect_to('index');
+    } else {
+      $self->flash( message => $error );
+      return $self->redirect_to('user_confirm');
+    }
   } else {
     $self->flash( message => $error );
     return $self->redirect_to('user_add');
   }
 };
 
-# confirmation post
-post '/users/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
+# email confirmation
+get '/users/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
   my $self = shift;
-  my ($success, $error) = $user->confirm_email(
+  my ($success, $error) = Journal::Users->confirm_email(
     username => $self->param('id'),
     confirm_token => $self->param('token'),
   );
   if ($success) {
-    $self->flash( message => 'Your email has been confirmed.' );
-    return $self->redirect_to('index');
+    $self->flash( message => 'Your email has been confirmed. You may now login.' );
+    return $self->redirect_to('login');
   } else {
     $self->flash( message => $error );
     return $self->redirect_to('user_confirm');
   }
 };
 
-# confirmation request page
+# email confirmation resend form
 get '/users/confirm' => ([id => qr/\w+/]) => sub {
   my $self = shift;
   if ( $self->session('username') && $user->{'confirmed_on'} ) {
     $self->flash( message => 'Your email has already been confirmed.' );
     return $self->redirect_to('index');
   }
-  return $self->render;
+  return $self->render( controller => 'users', action => 'confirm' );
 } => 'user_confirm';
 
-# confirmation request submission
-post '/users/:id/confirm' => ([id => qr/\w+/]) => sub {
+# email confirmation resend submission
+post '/users/confirm' => ([id => qr/\w+/]) => sub {
   my $self = shift;
-  my ($delivery, $error) = $user->send_confirmation_email;
+  my ($delivery, $error) = Journal::Users->send_confirmation_email( username => $self->param('username') );
   if ($delivery) {
-    $self->flash( message => 'Please check your inbox for a confirmation email.' );
+    $self->flash( message => 'Confirmation resent. Please check your inbox for the confirmation link.' );
     return $self->redirect_to('index');
   } else {
     $self->flash( message => $error );

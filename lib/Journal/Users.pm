@@ -172,20 +172,29 @@ sub create {
 }
 
 sub send_confirmation_email {
-  my $self = shift;
+  my $class = shift;
+  my %args = @_;
+  my $username = $args{'username'};
+
   my $url = $Journal::Config::url;
   my $postmark_token = $Journal::Config::postmark_token;
 
+  my $dbh = Journal::DB->connect;
+  my $query = "SELECT firstname, email, confirm_token FROM users WHERE username=?";
+  my $sth = $dbh->prepare($query);
+  $sth->execute($username) || die $dbh->errstr;
+  my $result = $sth->fetchrow_hashref;
+
   my $message = {
-    From => 'OpenBSD Journal <signup@undeadly.org>',
-    To => $self->{'email'},
+    From => 'OpenBSD Journal <signup@netflo.ws>',
+    To => $result->{'email'},
     Subject => 'OpenBSD Journal Confirmation',
   };
 
-  $message->{'TextBody'} = 'Hello ' . $self->{'firstname'} . ",\n\n" .
-    'Click the following link to complete your registration' .
+  $message->{'TextBody'} = 'Hello ' . $result->{'firstname'} . ",\n\n" .
+    "Click the following link to complete your registration\n" .
     "and begin using your OpenBSD Journal user account.\n\n" .
-    $url . '/user/' . $self->{'username'} . '/confirm/' . $self->{'confirm_token'} . "\n\n" .
+    $url . '/users/' . $username . '/confirm/' . $result->{'confirm_token'} . "\n\n" .
     "If you have any questions please reply to this email.\n\n" .
     "Thanks,\n\n--\nOpenBSD Journal\nsignup\@undeadly.org";
 
@@ -210,12 +219,12 @@ sub send_confirmation_email {
       type => 'system',
       message => sprintf("Unable to send confirmation email: %s", $resp->status_line),
     );
-    return (0, sprintf("We encountered a problem sending out your Email confirmation. Please wait a few minutes and then <a href=\"$url/user/%s/reconfirm\">click here</a> to resend your confirmation.", $self->{'username'}));
+    return (0, "We encountered a problem sending out your Email confirmation. Please wait a few minutes and then <a href=\"$url/users/confirm\">click here</a> to resend your confirmation.");
   }
 }
 
 sub confirm_email {
-  my $self = shift;
+  my $class = shift;
   my %args = @_;
   my $username = $args{'username'};
   my $confirm_token = $args{'confirm_token'};
