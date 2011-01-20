@@ -79,7 +79,7 @@ sub find {
 
   my $dbh = Journal::DB->connect;
   my $query = "SELECT u.id, username,
-                      firstname, lastname, email, url, tz, reputation,
+                      firstname, lastname, email, url, tz, reputation, confirmed_on,
                       manage_admins, manage_editors, manage_users,
                       edit_articles, delete_articles, create_articles, read_articles,
                       edit_comments, delete_comments, create_comments, read_comments
