@@ -16,10 +16,20 @@
     <% if ($self->session('username')) { %>
       <li><a href="/user/profile"><%= $self->session('username') %></a></li>
       <li><a href="/logout">Logout</a></li>
-    <% } else { %>
-      <li><a href="/login">Login</a></li>
-    <% } %>
     </ul>
+    <% } else { %>
+    </ul>
+  </div>
+  <div id="login">
+    <form method="post" action="/login">
+    <ul>
+      <li>Username: <input name="username" /></li>
+      <li>Password: <input name="password" type="password" /></li>
+      <li><input id="login" class="btn" name="submit" type="submit" value="Login" /></li>
+      <li><span id="signup">or <a href="/user/add">Sign-Up</a></li>
+    </ul>
+    </form>
+    <% } %>
   </div>
 </div>
 

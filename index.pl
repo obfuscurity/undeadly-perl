@@ -22,14 +22,7 @@ app->hook(after_static_dispatch => sub {
   $user = Journal::Users->find( username => ($self->session('username') || 'anonymous') );
 });
 
-# login form
-get '/login' => sub {
-  my $self = shift;
-  return $self->redirect_to('index') if $self->session('username');
-  return $self->render;
-} => 'login';
-
-# login submission
+# login
 post '/login' => sub {
   my $self = shift;
   my ($valid_password, $error) = $user->authenticate(
@@ -147,7 +140,7 @@ get '/users/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
   );
   if ($success) {
     $self->flash( message => 'Your email has been confirmed. You may now login.' );
-    return $self->redirect_to('login');
+    return $self->redirect_to('index');
   } else {
     $self->flash( message => $error );
     return $self->redirect_to('user_confirm');
