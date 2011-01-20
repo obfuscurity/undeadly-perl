@@ -202,7 +202,7 @@ sub send_confirmation_email {
     "and begin using your OpenBSD Journal user account.\n\n" .
     $url . '/users/' . $username . '/confirm/' . $result->{'confirm_token'} . "\n\n" .
     "If you have any questions please reply to this email.\n\n" .
-    "Thanks,\n\n--\nOpenBSD Journal\nsignup\@undeadly.org";
+    "Thanks,\n\n--\nOpenBSD Journal\nhttp://undeadly.org/";
 
   my $json = JSON::Any->new;
   my $ua = LWP::UserAgent->new( timeout => 30 );
