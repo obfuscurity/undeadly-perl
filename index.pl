@@ -107,7 +107,7 @@ get '/users/add' => sub {
     $self->flash( message => sprintf("You are already logged in as %s.", $self->session('username')) );
     return $self->redirect_to('index');
   }
-  return $self->render;
+  return $self->render( controller => 'users', action => 'add' );
 } => 'user_add';
 
 # user add submission

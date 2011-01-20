@@ -8,8 +8,7 @@ use MIME::Base64;
 sub generate_pass {
   my %args = @_;
   my $plain = $args{'plain'};
-  my $salt = $args{'salt'} || _generate_salt();
-
+  my $salt = $args{'salt'} || generate_salt();
   return MIME::Base64::encode( Digest::SHA::sha256( $plain . $salt ) . $salt, '' );
 }
 
@@ -17,16 +16,15 @@ sub validate_pass {
   my %args = @_;
   my $plain = $args{'plain'};
   my $hashpw = $args{'hashpw'};
-
   my $salt = _extract_salt($hashpw);
-  if ( generate_pass($plain, $salt) eq $hashpw ) {
+  if ( generate_pass( plain => $plain, salt => $salt) eq $hashpw ) {
     return 1;
   } else {
     return 0;
   }
 }
  
-sub _generate_salt {
+sub generate_salt {
   my @bytes;
   my $len = 8 + int(rand(8));
   for my $i (1 .. $len) {

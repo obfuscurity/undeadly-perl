@@ -47,18 +47,23 @@ sub authenticate {
   }
 
   my $dbh = Journal::DB->connect;
+
   my $query = "SELECT u.id, u.username, u.password, u.confirmed_on FROM users u, roles r WHERE u.username=? AND r.can_login=1";
   my $sth = $dbh->prepare($query);
-
   $sth->execute($username) || die $dbh->errstr;
-
   my $result = $sth->fetchrow_hashref;
+
   my $valid_password = Journal::Users::Auth::validate_pass(
     plain => $password,
     hashpw => $result->{'password'}
   );
 
   if ( $valid_password && $result->{'confirmed_on'} ) {
+    {
+      my $query = "UPDATE users SET last_login_on=? WHERE username=?";
+      my $sth = $dbh->prepare($query);
+      $sth->execute( $timer->gmtime, $username );
+    }
     $self->{'username'} = $username;
     return (1, undef);
   } elsif ( $valid_password ) {
@@ -153,10 +158,11 @@ sub create {
   {
     my $query = "INSERT INTO users VALUES (NULL, 4, ?,?,?,?,?,?,?, 0, ?,?, NULL, ?, NULL)";
     my $sth = $dbh->prepare($query);
-    my $password = Journal::Users::Auth::generate_pass( $user->{'password1'} );
+    my $salt = Journal::Users::Auth::generate_salt;
+    my $hashpw = Journal::Users::Auth::generate_pass( plain => $user->{'password1'}, salt => $salt );
     $sth->execute(
       $user->{'username'},
-      Journal::Users::Auth::generate_pass( $user->{'password1'} ),
+      $hashpw,
       $user->{'firstname'},
       $user->{'lastname'},
       $user->{'email'},
