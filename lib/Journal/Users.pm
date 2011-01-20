@@ -192,7 +192,7 @@ sub send_confirmation_email {
   my $result = $sth->fetchrow_hashref;
 
   my $message = {
-    From => 'OpenBSD Journal <signup@netflo.ws>',
+    From => 'OpenBSD Journal <signup@undeadly.org>',
     To => $result->{'email'},
     Subject => 'OpenBSD Journal Confirmation',
   };
