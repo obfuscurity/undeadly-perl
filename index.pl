@@ -50,7 +50,7 @@ get '/logout' => sub {
   my $self = shift;
   return $self->redirect_to('index') unless $self->session('username');
   $self->session( expires => 1 );
-  return $self->redirect_to('login');
+  return $self->redirect_to('index');
 } => 'logout';
 
 # front page
