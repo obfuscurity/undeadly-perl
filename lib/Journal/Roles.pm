@@ -22,13 +22,18 @@ sub new {
 sub create {
   my $self = shift;
   my %args = @_;
+  my $name = $args{'name'};
+
+  unless ($name) {
+    return (0, 'Need a valid name for this role.');
+  }
 
   my $dbh = Journal::DB::connect;
   my $role_exists;
   {
     my $query = "SELECT count(*) FROM roles WHERE name=?";
     my $sth = $dbh->prepare($query);
-    $sth->execute($args{'name'}) || die $dbh->errstr;
+    $sth->execute($name) || die $dbh->errstr;
     my $result = $sth->fetchrow_hashref;
     $role_exists = $result->{'count'} || undef;
   }
@@ -38,7 +43,7 @@ sub create {
   } else {
     my $query = "INSERT INTO roles VALUES (NULL, ?, 0,0,0,0,0,0,1,0,0,0,1,0)";
     my $sth = $dbh->prepare($query);
-    $sth->execute($args{'name'}) || die $dbh->errstr;
+    $sth->execute($name) || die $dbh->errstr;
     return (1, undef);
   }
 }
