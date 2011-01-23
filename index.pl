@@ -7,6 +7,7 @@ use lib qw(lib);
 use Journal::Articles;
 use Journal::DB;
 use Journal::Events;
+use Journal::Roles;
 use Journal::Users;
 
 use vars qw( $event $user );
@@ -20,6 +21,7 @@ BEGIN {
 app->hook(after_static_dispatch => sub {
   my $self = shift;
   $user = Journal::Users->find( username => ($self->session('username') || 'anonymous') );
+  $self->stash( user => $user );
 });
 
 # login
@@ -169,6 +171,20 @@ post '/users/confirm' => ([id => qr/\w+/]) => sub {
     return $self->redirect_to('user_confirm');
   }
 };
+
+# manage roles
+get '/roles' => sub {
+  my $self = shift;
+  my $roles = Journal::Roles->find_all;
+  if ($user->{'manage_users'}) {
+    $self->stash( roles => $roles );
+    $self->flash( message => 'No roles found' ) unless (@$roles);
+    return $self->render( controller => 'roles', action => 'list' );
+  } else {
+    $self->flash( message => 'You be lost, biotch. Step off.');
+    return $self->redirect_to('not_found');
+  }
+} => 'roles_list';
 
 app->secret('k7oiefbiwofi43o9fhaw');
 app->start;

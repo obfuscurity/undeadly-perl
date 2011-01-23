@@ -1,0 +1,50 @@
+<%= include 'header', title => 'Roles' %>
+
+  <h2>Roles</h2>
+
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
+
+  <div id="main">
+    <% if (@$roles) { %>
+    <table>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>manage_admins</th>
+        <th>manage_editors</th>
+        <th>manage_users</th>
+        <th>edit_articles</th>
+        <th>delete_articles</th>
+        <th>create_articles</th>
+        <th>read_articles</th>
+        <th>edit_comments</th>
+        <th>delete_comments</th>
+        <th>create_comments</th>
+        <th>read_comments</th>
+        <th>can_login</th>
+      </tr>
+      <% for my $role (@{$roles}) { %>
+      <tr>
+        <td><%= $role->{'id'} %></td>
+        <td><%= $role->{'name'} %></td>
+        <td><%= $role->{'manage_admins'} %></td>
+        <td><%= $role->{'manage_editors'} %></td>
+        <td><%= $role->{'manage_users'} %></td>
+        <td><%= $role->{'edit_articles'} %></td>
+        <td><%= $role->{'delete_articles'} %></td>
+        <td><%= $role->{'create_articles'} %></td>
+        <td><%= $role->{'read_articles'} %></td>
+        <td><%= $role->{'edit_comments'} %></td>
+        <td><%= $role->{'delete_comments'} %></td>
+        <td><%= $role->{'create_comments'} %></td>
+        <td><%= $role->{'read_comments'} %></td>
+        <td><%= $role->{'can_login'} %></td>
+      </tr>
+      <% } %>
+    </table>
+    <% } %>
+  </div>
+
+<%= include 'footer' %>

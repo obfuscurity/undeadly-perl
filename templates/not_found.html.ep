@@ -2,6 +2,10 @@
 
   <h2>Page not Found</h2>
 
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
+
   <div id="main">
     <p>404 error</p>
   </div>

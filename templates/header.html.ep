@@ -13,6 +13,11 @@
   <div id="nav">
     <ul>
       <li><a href="/">Home</a></li>
+    <% if ($user->{'manage_users'}) { %>
+      <li><a href="/submissions">Submissions</a></li>
+      <li><a href="/topics">Topics</a></li>
+      <li><a href="/roles">Roles</a></li>
+    <% } %>
     <% if ($self->session('username')) { %>
       <li><a href="/user/profile"><%= $self->session('username') %></a></li>
       <li><a href="/logout">Logout</a></li>
