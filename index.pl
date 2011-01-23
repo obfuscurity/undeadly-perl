@@ -8,6 +8,7 @@ use Journal::Articles;
 use Journal::DB;
 use Journal::Events;
 use Journal::Roles;
+use Journal::Topics;
 use Journal::Users;
 
 use vars qw( $event $user );
@@ -185,6 +186,20 @@ get '/roles' => sub {
     return $self->redirect_to('not_found');
   }
 } => 'roles_list';
+
+# manage topics
+get '/topics' => sub {
+  my $self = shift;
+  my $topics = Journal::Topics->find_all;
+  if ($user->{'edit_articles'}) {
+    $self->stash( topics => $topics );
+    $self->flash( message => 'No topics found' ) unless (@$topics);
+    return $self->render( controller => 'topics', action => 'list' );
+  } else {
+    $self->flash( message => 'You be lost, biotch. Step off.');
+    return $self->redirect_to('not_found');
+  }
+} => 'topics_list';
 
 app->secret('k7oiefbiwofi43o9fhaw');
 app->start;

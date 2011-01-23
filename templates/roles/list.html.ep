@@ -1,6 +1,6 @@
-<%= include 'header', title => 'Roles' %>
+<%= include 'header', title => 'User Roles' %>
 
-  <h2>Roles</h2>
+  <h2>User Roles</h2>
 
   <% if (my $message = flash 'message') { %>
   <div id="message"><h3><%= $message %></h3></div>

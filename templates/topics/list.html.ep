@@ -1,0 +1,22 @@
+<%= include 'header', title => 'Article Topics' %>
+
+  <h2>Article Topics</h2>
+
+  <% if (my $message = flash 'message') { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
+
+  <div id="main">
+    <% if (@$topics) { %>
+    <ul>
+      <% for my $topic (@{$topics}) { %>
+        <li><%= $topic->{'id'} %></li>
+        <li><%= $topic->{'name'} %></li>
+        <li><%= $topic->{'description'} %></li>
+        <li><%= $topic->{'image_url'} %></li>
+      <% } %>
+    </ul>
+    <% } %>
+  </div>
+
+<%= include 'footer' %>
