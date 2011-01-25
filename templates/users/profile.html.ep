@@ -7,7 +7,7 @@
   <% } %>
 
   <div id="main">
-  <% if (($profile->{'username'} eq $user->{'username'}) || ($user->{'manage_users'})) { %>
+  <% if ((($profile->{'username'} eq $user->{'username'}) && ($user->{'username'} ne 'anonymous')) || ($user->{'manage_users'})) { %>
     <form method="post">
       <ul>
         <li><%= $profile->{'firstname'} %></li>
