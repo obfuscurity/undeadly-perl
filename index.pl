@@ -214,6 +214,12 @@ get '/topics' => sub {
   }
 } => 'topics_list';
 
+# 404 page not found
+get '/404' => sub {
+  my $self = shift;
+  return $self->render( status => 404, action => 'not_found' );
+} => 'not_found';
+
 app->secret('k7oiefbiwofi43o9fhaw');
 app->start;
 
