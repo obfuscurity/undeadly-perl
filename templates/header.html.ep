@@ -31,7 +31,7 @@
       <li>Username: <input name="username" /></li>
       <li>Password: <input name="password" type="password" /></li>
       <li><input id="login" class="btn" name="submit" type="submit" value="Login" /></li>
-      <li><span id="signup">or <a href="/user/add">Sign-Up</a></li>
+      <li><span id="signup">or <a href="/users/add">Sign-Up</a></li>
     </ul>
     </form>
     <% } %>
