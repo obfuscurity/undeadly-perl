@@ -19,7 +19,7 @@
       <li><a href="/roles">Roles</a></li>
     <% } %>
     <% if ($self->session('username')) { %>
-      <li><a href="/user/profile"><%= $self->session('username') %></a></li>
+      <li><a href="/users/<%= $self->session('username') %>"><%= $self->session('username') %></a></li>
       <li><a href="/logout">Logout</a></li>
     </ul>
     <% } else { %>

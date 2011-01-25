@@ -1,21 +1,32 @@
 <%= include 'header', title => 'User Profile' %>
 
-  <h2>User Profile - <%= $user->{'username'} %></h2>
+  <h2>User Profile - <%= $profile->{'username'} %></h2>
 
   <% if (my $message = flash 'message') { %>
   <div id="message"><h3><%= $message %></h3></div>
   <% } %>
 
   <div id="main">
-    <form>
+  <% if ($profile->{'username'} eq $user->{'username'}) { %>
+    <form method="post">
       <ul>
         <li><%= $user->{'firstname'} %></li>
         <li><%= $user->{'lastname'} %></li>
         <li><%= $user->{'email'} %></li>
         <li><%= $user->{'url'} %></li>
         <li><%= $user->{'tz'} %></li>
+        <li><input type="submit" name="submit" value="Edit Profile" /></li>
       </ul>
     </form>
+  <% } else { %>
+    <ul>
+      <li><%= $profile->{'firstname'} %></li>
+      <li><%= $profile->{'lastname'} %></li>
+      <li><%= $profile->{'email'} %></li>
+      <li><%= $profile->{'url'} %></li>
+      <li><%= $profile->{'tz'} %></li>
+    </ul>
+  <% } %>
   </div>
 
 </body>

@@ -173,6 +173,19 @@ post '/users/confirm' => ([id => qr/\w+/]) => sub {
   }
 };
 
+# user profile
+get '/users/:id' => ([id => qr/\w+/]) => sub {
+  my $self = shift;
+  my $profile;
+  if ( $self->session('username') eq $self->param('id') ) {
+    $profile = $user;
+  } else {
+    $profile = Journal::Users->find( username => $self->param('id') );
+  }
+  $self->stash( profile => $profile );
+  return $self->render( controller => 'users', action => 'profile' );
+} => 'user_profile';
+
 # manage roles
 get '/roles' => sub {
   my $self = shift;
