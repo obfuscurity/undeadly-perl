@@ -28,6 +28,7 @@ app->hook(after_static_dispatch => sub {
 # login
 post '/login' => sub {
   my $self = shift;
+  return $self->redirect_to('index') if ($user->{'username'} eq 'anonymous');
   my ($valid_password, $error) = $user->authenticate(
     username => $self->param('username'),
     password => $self->param('password'),

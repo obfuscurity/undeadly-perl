@@ -38,11 +38,6 @@ sub authenticate {
   my $username = $args{'username'};
   my $password = $args{'password'};
 
-  if ($username =~ /^anonymous$/i) {
-    $self->flash( message => 'Invalid account, please try again.' );
-    return $self->redirect_to('login');
-  }
-
   my $dbh = Journal::DB->connect;
 
   my $query = "SELECT u.id, u.username, u.password, u.confirmed_on FROM users u, roles r WHERE u.username=? AND r.can_login=1";
