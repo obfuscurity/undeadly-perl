@@ -44,7 +44,7 @@ post '/login' => sub {
 # logout
 get '/logout' => sub {
   my $self = shift;
-  return $self->redirect_to('index') unless $self->session('username');
+  return $self->redirect_to('index') if ($user->{'username'} eq 'anonymous');
   $self->session( expires => 1 );
   return $self->redirect_to('index');
 } => 'logout';
@@ -99,8 +99,8 @@ post '/articles/add' => sub {
 # user add form
 get '/users/add' => sub {
   my $self = shift;
-  if ($self->session('username')) {
-    $self->flash( message => sprintf("You are already logged in as %s.", $self->session('username')) );
+  unless ($user->{'username'} eq 'anonymous') {
+    $self->flash( message => sprintf("You are already logged in as %s.", $user->{'username'}) );
     return $self->redirect_to('index');
   }
   return $self->render( controller => 'users', action => 'add' );
@@ -153,7 +153,7 @@ get '/users/:id/confirm/:token' => ([id => qr/\w+/]) => sub {
 # email confirmation resend form
 get '/users/confirm' => ([id => qr/\w+/]) => sub {
   my $self = shift;
-  if ( $self->session('username') && $user->{'confirmed_on'} ) {
+  if ( ($user->{'username'} ne 'anonymous') && $user->{'confirmed_on'} ) {
     $self->flash( message => 'Your email has already been confirmed.' );
     return $self->redirect_to('index');
   }
@@ -177,7 +177,7 @@ post '/users/confirm' => ([id => qr/\w+/]) => sub {
 get '/users/:id' => ([id => qr/\w+/]) => sub {
   my $self = shift;
   my $profile;
-  if ( $self->session('username') eq $self->param('id') ) {
+  if ( $user->{'username'} eq $self->param('id') ) {
     $profile = $user;
   } else {
     $profile = Journal::Users->find( username => $self->param('id') );
