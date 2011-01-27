@@ -19,16 +19,17 @@ BEGIN {
 }
 
 # get user details, if possible
-app->hook(after_static_dispatch => sub {
+under sub {
   my $self = shift;
   $user = Journal::Users->find( username => ($self->session('username') || 'anonymous') );
   $self->stash( user => $user );
-});
+  return 1;
+};
 
 # login
 post '/login' => sub {
   my $self = shift;
-  return $self->redirect_to('index') if ($user->{'username'} eq 'anonymous');
+  return $self->redirect_to('index') if ($self->param('username') eq 'anonymous');
   my ($valid_password, $error) = $user->authenticate(
     username => $self->param('username'),
     password => $self->param('password'),
