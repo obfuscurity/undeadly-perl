@@ -75,6 +75,7 @@ INSERT INTO revisions VALUES (1, 1, 1, '2011-01-01 00:00:00', 'Title', 'Dept', '
 INSERT INTO articles VALUES (1, 1, 1, 'submitted', NULL);
 CREATE TABLE comments(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   parent_id INTEGER NOT NULL DEFAULT 0,
    article_id INTEGER NOT NULL,
    user_id INTEGER NOT NULL,
    timestamp TEXT NOT NULL,
