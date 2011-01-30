@@ -104,14 +104,8 @@ sub create {
   unless ($user->{'username'} =~ /[\w+]{3,12}/) {
     return (0, 'Usernames must be 3-12 letters long.');
   }
-  unless ($user->{'password1'} =~ /[\S+]{6,12}/) {
-    return (0, 'Passwords must be 6-12 characters long.');
-  }
-  unless ($user->{'password2'} =~ /[\S+]{6,12}/) {
-    return (0, 'Passwords must be 6-12 characters long.');
-  }
-  unless ($user->{'password1'} eq $user->{'password2'}) {
-    return (0, 'Passwords do not match.');
+  unless ($user->{'password'} =~ /[\S+]{6,12}/) {
+    return (0, 'Password must be 6-12 characters long.');
   }
   unless ($user->{'firstname'} =~ /[\w+]{1,20}/) {
     return (0, 'Firstname must be 1-20 letters long.');
@@ -151,7 +145,7 @@ sub create {
     my $query = "INSERT INTO users VALUES (NULL, 4, ?,?,?,?,?,?,?, 0, ?,?, NULL, ?, NULL)";
     my $sth = $dbh->prepare($query);
     my $salt = Journal::Users::Auth::generate_salt;
-    my $hashpw = Journal::Users::Auth::generate_pass( plain => $user->{'password1'}, salt => $salt );
+    my $hashpw = Journal::Users::Auth::generate_pass( plain => $user->{'password'}, salt => $salt );
     $sth->execute(
       $user->{'username'},
       $hashpw,
