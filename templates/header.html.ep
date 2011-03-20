@@ -14,7 +14,7 @@
     <ul>
       <li><a href="/">Home</a></li>
     <% if ($user->{'manage_users'}) { %>
-      <li><a href="/submissions">Submissions</a></li>
+      <li><a href="/articles/queue">Queue</a></li>
       <li><a href="/topics">Topics</a></li>
       <li><a href="/roles">Roles</a></li>
     <% } %>

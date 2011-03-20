@@ -71,7 +71,7 @@ sub find_all {
   my $sth = $dbh->prepare($query);
 
   $sth->execute(
-    ($args{'status'} || 'published'),
+    $args{'status'},
     ($args{'limit'} || 10),
   ) || die $dbh->errstr;
 
@@ -86,19 +86,24 @@ sub find_all {
 sub find {
   my $self = shift;
   my %args = @_;
+  my $status = $args{'status'} || q('published', 'submitted');
 
   my $dbh = Journal::DB->connect;
-  my $query = "SELECT a.id, a.status, a.published_on,
+  my $query = "SELECT a.id, a.published_on,
                       r.timestamp, r.title, r.dept, r.content, r.description, r.format,
                       t.name, t.description AS topic_description, t.image_url, u.username
                 FROM articles a, revisions r, topics t, users u
                 WHERE a.id=?
+                AND a.status IN (?)
                 AND a.revision_id=r.id
                 AND a.topic_id=t.id
                 AND r.user_id=u.id";
   my $sth = $dbh->prepare($query);
 
-  $sth->execute($args{'id'}) || die $dbh->errstr;
+  $sth->execute(
+    $args{'id'},
+    $status,
+  ) || die $dbh->errstr;
 
   my $article = $sth->fetchrow_hashref;
 

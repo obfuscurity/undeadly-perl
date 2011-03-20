@@ -1,0 +1,27 @@
+<%= include 'header', title => 'Article Queue' %>
+
+  <h2>Article Queue</h2>
+
+  <% if ($message) { %>
+  <div id="message"><h3><%= $message %></h3></div>
+  <% } %>
+
+  <div id="main">
+    <% if (@$articles) { %>
+    <ul>
+      <% for my $article (@{$articles}) { %>
+      <li>
+        <a href="/articles/<%= $article->{'id'} %>"><%= $article->{'title'} %></a>&nbsp;
+        <%= $article->{'username'} %>&nbsp;
+        <%= $article->{'published_on'} %>&nbsp;
+        <%= $article->{'dept'} %>&nbsp;
+        <%= $article->{'content'} %>&nbsp;
+        <%= $article->{'description'} %>
+        <%= $article->{'format'} %>
+      </li>
+      <% } %>
+    </ul>
+    <% } %>
+  </div>
+
+<%= include 'footer' %>

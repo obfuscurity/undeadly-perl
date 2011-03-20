@@ -39,7 +39,7 @@ post '/login' => sub {
     return $self->redirect_to('index');
   } else {
     $self->flash( message => $error );
-    return $self->redirect_to('login');
+    return $self->redirect_to($self->req->headers->referrer);
   }
 };
 
@@ -54,9 +54,9 @@ get '/logout' => sub {
 # front page
 get '/' => sub {
   my $self = shift;
-  my $articles = Journal::Articles->find_all( status => 'submitted' );
+  my $articles = Journal::Articles->find_all( status => 'published' );
   $self->stash( articles => $articles );
-  $self->flash( message => 'No articles found' ) unless (@$articles);
+  $self->stash( message => 'No articles found' ) unless (@$articles);
   return $self->render( controller => 'articles', action => 'list' );
 } => 'index';
 
@@ -69,7 +69,7 @@ get '/articles' => sub {
 # full article view
 get '/articles/:id' => ([id => qr/\d+/]) => sub {
   my $self = shift;
-  my $article = Journal::Articles->find( id => $self->param('id') );
+  my $article = Journal::Articles->find( id => $self->param('id'), status => 'published' );
   if ($article) {
     $self->stash( article => $article );
     return $self->render( controller => 'articles', action => 'view' );
@@ -78,6 +78,28 @@ get '/articles/:id' => ([id => qr/\d+/]) => sub {
     return $self->redirect_to('index');
   }
 } => 'article_view';
+
+# article edit
+get '/articles/:id/edit' => ([id => qr/\d+/]) => sub {
+  my $self = shift;
+  my $article = Journal::Articles->find( id => $self->param('id') );
+  if ($article) {
+    $self->stash( article => $article );
+    return $self->render( controller => 'articles', action => 'view' );
+  } else {
+    $self->flash( message => 'Article not found' );
+    return $self->redirect_to('index');
+  }
+} => 'article_edit';
+
+# article queue
+get '/articles/queue' => sub {
+  my $self = shift;
+  my $articles = Journal::Articles->find_all( status => 'submitted' );
+  $self->stash( articles => $articles );
+  $self->stash( message => 'No articles found' ) unless (@$articles);
+  return $self->render( controller => 'articles', action => 'queue' );
+} => 'article_queue';
 
 # article form
 get '/articles/add' => sub {
@@ -193,7 +215,7 @@ get '/roles' => sub {
   my $roles = Journal::Roles->find_all;
   if ($user->{'manage_users'}) {
     $self->stash( roles => $roles );
-    $self->flash( message => 'No roles found' ) unless (@$roles);
+    $self->stash( message => 'No roles found' ) unless (@$roles);
     return $self->render( controller => 'roles', action => 'list' );
   } else {
     $self->flash( message => 'You be lost, biotch. Step off.');
@@ -207,7 +229,7 @@ get '/topics' => sub {
   my $topics = Journal::Topics->find_all;
   if ($user->{'edit_articles'}) {
     $self->stash( topics => $topics );
-    $self->flash( message => 'No topics found' ) unless (@$topics);
+    $self->stash( message => 'No topics found' ) unless (@$topics);
     return $self->render( controller => 'topics', action => 'list' );
   } else {
     $self->flash( message => 'You be lost, biotch. Step off.');
